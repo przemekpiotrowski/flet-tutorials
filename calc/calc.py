@@ -11,6 +11,9 @@ class CalculatorApp(UserControl):
         if e.data == "AC":
             self.result.value = float(0)
 
+        elif e.data == "%":
+            self.result.value = float(self.result.value) / 100
+
         elif e.data == "+/-":
             self.result.value = 0 - float(self.result.value)
 
