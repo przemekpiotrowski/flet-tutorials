@@ -8,13 +8,20 @@ BUTTON_ORANGE = 3
 
 def main(page: Page):
     page.title = "Calc App"
-    result = Text(value="0", color=colors.WHITE, size=20)
+    result = Text(value=float(0), color=colors.WHITE, size=20)
 
     def do_calc(e):
         if e.data == "AC":
-            result.value = "0"
+            result.value = float(0)
+
+        elif e.data == "+/-":
+            result.value = 0 - float(result.value)
+
         else:
-            result.value = e.data
+            try:
+                result.value = float(e.data)
+            except ValueError:
+                result.value = e.data
 
         result.update()
 
