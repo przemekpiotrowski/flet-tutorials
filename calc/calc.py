@@ -7,43 +7,43 @@ BUTTON_ORANGE = 3
 
 
 class CalculatorApp(UserControl):
+    def do_calc(self, e):
+        if e.data == "AC":
+            self.result.value = float(0)
+
+        elif e.data == "+/-":
+            self.result.value = 0 - float(self.result.value)
+
+        else:
+            try:
+                self.result.value = float(e.data)
+            except ValueError:
+                self.result.value = e.data
+
+        self.result.update()
+
+    def build_button(self, text, expand=1, type=BUTTON_REGULAR):
+        if type == BUTTON_GREY:
+            bgcolor = colors.BLUE_GREY_100
+            color = colors.BLACK
+        elif type == BUTTON_ORANGE:
+            bgcolor = colors.ORANGE
+            color = colors.WHITE
+        else:  # BUTTON_REGULAR
+            bgcolor = colors.WHITE24
+            color = colors.WHITE
+
+        return ElevatedButton(
+            text=text,
+            bgcolor=bgcolor,
+            color=color,
+            expand=expand,
+            on_click=self.do_calc,
+            data=text,
+        )
+
     def build(self):
-        result = Text(value=float(0), color=colors.WHITE, size=20)
-
-        def do_calc(e):
-            if e.data == "AC":
-                result.value = float(0)
-
-            elif e.data == "+/-":
-                result.value = 0 - float(result.value)
-
-            else:
-                try:
-                    result.value = float(e.data)
-                except ValueError:
-                    result.value = e.data
-
-            result.update()
-
-        def build_button(text, expand=1, type=BUTTON_REGULAR):
-            if type == BUTTON_GREY:
-                bgcolor = colors.BLUE_GREY_100
-                color = colors.BLACK
-            elif type == BUTTON_ORANGE:
-                bgcolor = colors.ORANGE
-                color = colors.WHITE
-            else:  # BUTTON_REGULAR
-                bgcolor = colors.WHITE24
-                color = colors.WHITE
-
-            return ElevatedButton(
-                text=text,
-                bgcolor=bgcolor,
-                color=color,
-                expand=expand,
-                on_click=do_calc,
-                data=text,
-            )
+        self.result = Text(value=float(0), color=colors.WHITE, size=20)
 
         return Container(
             width=300,
@@ -51,44 +51,44 @@ class CalculatorApp(UserControl):
             padding=20,
             content=Column(
                 controls=[
-                    Row(controls=[result], alignment="end"),
+                    Row(controls=[self.result], alignment="end"),
                     Row(
                         controls=[
-                            build_button("AC", type=BUTTON_GREY),
-                            build_button("+/-", type=BUTTON_GREY),
-                            build_button("%", type=BUTTON_GREY),
-                            build_button("/", type=BUTTON_ORANGE),
+                            self.build_button("AC", type=BUTTON_GREY),
+                            self.build_button("+/-", type=BUTTON_GREY),
+                            self.build_button("%", type=BUTTON_GREY),
+                            self.build_button("/", type=BUTTON_ORANGE),
                         ]
                     ),
                     Row(
                         controls=[
-                            build_button("7"),
-                            build_button("8"),
-                            build_button("9"),
-                            build_button("*", type=BUTTON_ORANGE),
+                            self.build_button("7"),
+                            self.build_button("8"),
+                            self.build_button("9"),
+                            self.build_button("*", type=BUTTON_ORANGE),
                         ]
                     ),
                     Row(
                         controls=[
-                            build_button("4"),
-                            build_button("5"),
-                            build_button("6"),
-                            build_button("-", type=BUTTON_ORANGE),
+                            self.build_button("4"),
+                            self.build_button("5"),
+                            self.build_button("6"),
+                            self.build_button("-", type=BUTTON_ORANGE),
                         ]
                     ),
                     Row(
                         controls=[
-                            build_button("1"),
-                            build_button("2"),
-                            build_button("3"),
-                            build_button("+", type=BUTTON_ORANGE),
+                            self.build_button("1"),
+                            self.build_button("2"),
+                            self.build_button("3"),
+                            self.build_button("+", type=BUTTON_ORANGE),
                         ]
                     ),
                     Row(
                         controls=[
-                            build_button("0", expand=2),
-                            build_button("."),
-                            build_button("=", type=BUTTON_ORANGE),
+                            self.build_button("0", expand=2),
+                            self.build_button("."),
+                            self.build_button("=", type=BUTTON_ORANGE),
                         ]
                     ),
                 ]
