@@ -7,23 +7,39 @@ BUTTON_ORANGE = 3
 
 
 class CalculatorApp(UserControl):
+    def reset_calc_state(self):
+        self.start_new_number = True
+
     def do_calc(self, e):
         if e.data == "AC":
-            self.result.value = float(0)
+            self.result.value = "0"
+            self.reset_calc_state()
+
+        elif e.data in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"):
+            if self.result.value == "0" or self.start_new_number is True:
+                self.result.value = e.data
+                self.start_new_number = False
+            else:
+                self.result.value = self.result.value + e.data
 
         elif e.data == "%":
-            self.result.value = float(self.result.value) / 100
+            self.result.value = self.format_number(float(self.result.value) / 100)
+            self.reset_calc_state()
 
         elif e.data == "+/-":
-            self.result.value = 0 - float(self.result.value)
+            self.result.value = self.format_number(0 - float(self.result.value))
 
         else:
-            try:
-                self.result.value = float(e.data)
-            except ValueError:
-                self.result.value = e.data
+            self.result.value = f"TODO: {e.data}"
+            self.reset_calc_state()
 
         self.result.update()
+
+    def format_number(self, number):
+        if number % 1 == 0:
+            number = int(number)
+
+        return str(number)
 
     def build_button(self, text, expand=1, type=BUTTON_REGULAR):
         if type == BUTTON_GREY:
@@ -46,7 +62,8 @@ class CalculatorApp(UserControl):
         )
 
     def build(self):
-        self.result = Text(value=float(0), color=colors.WHITE, size=20)
+        self.result = Text(value="0", color=colors.WHITE, size=20)
+        self.reset_calc_state()
 
         return Container(
             width=300,
