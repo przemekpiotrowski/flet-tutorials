@@ -11,26 +11,28 @@ class CalculatorApp(UserControl):
         self.start_new_number = True
 
     def do_calc(self, e):
-        if e.data == "AC":
+        data = e.control.data
+
+        if data == "AC":
             self.result.value = "0"
             self.reset_calc_state()
 
-        elif e.data in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"):
+        elif data in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"):
             if self.result.value == "0" or self.start_new_number is True:
-                self.result.value = e.data
+                self.result.value = data
                 self.start_new_number = False
             else:
-                self.result.value = self.result.value + e.data
+                self.result.value = self.result.value + data
 
-        elif e.data == "%":
+        elif data == "%":
             self.result.value = self.format_number(float(self.result.value) / 100)
             self.reset_calc_state()
 
-        elif e.data == "+/-":
+        elif data == "+/-":
             self.result.value = self.format_number(0 - float(self.result.value))
 
         else:
-            self.result.value = f"TODO: {e.data}"
+            self.result.value = f"TODO: {data}"
             self.reset_calc_state()
 
         self.result.update()
