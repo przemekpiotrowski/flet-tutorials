@@ -24,6 +24,17 @@ class CalculatorApp(UserControl):
             else:
                 self.result.value = self.result.value + data
 
+        elif data == ".":
+            if self.result.value == "0" or self.start_new_number is True:
+                self.result.value = "0" + data
+                self.start_new_number = False
+            else:
+                try:
+                    if float(self.result.value + data):
+                        self.result.value = self.result.value + data
+                except ValueError:
+                    pass
+
         elif data == "%":
             self.result.value = self.format_number(float(self.result.value) / 100)
             self.reset_calc_state()
