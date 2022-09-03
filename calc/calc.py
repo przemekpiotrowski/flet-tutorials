@@ -6,8 +6,24 @@ BUTTON_GREY = 2
 BUTTON_ORANGE = 3
 
 
+def do_math(number1, operator, number2):
+    if operator == "+":
+        return number1 + number2
+
+    elif operator == "-":
+        return number1 - number2
+
+    elif operator == "*":
+        return number1 * number2
+
+    elif operator == "/":
+        return number1 / number2
+
+
 class CalculatorApp(UserControl):
-    def reset_calc_state(self):
+    def reset_calc_state(self, number1=0, operator="+"):
+        self.number1 = float(number1)
+        self.operator = operator
         self.start_new_number = True
 
     def do_calc(self, e):
@@ -41,6 +57,15 @@ class CalculatorApp(UserControl):
 
         elif data == "+/-":
             self.result.value = self.format_number(0 - float(self.result.value))
+
+        elif data in ("+", "-", "*", "/"):
+            try:
+                result = do_math(self.number1, self.operator, float(self.result.value))
+                self.result.value = self.format_number(result)
+                self.reset_calc_state(result, data)
+            except ZeroDivisionError:
+                self.result.value = "Error"
+                self.reset_calc_state()
 
         else:
             self.result.value = f"TODO: {data}"
