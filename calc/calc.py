@@ -67,8 +67,17 @@ class CalculatorApp(UserControl):
                 self.result.value = "Error"
                 self.reset_calc_state()
 
+        elif data == "=":
+            try:
+                result = do_math(self.number1, self.operator, float(self.result.value))
+                self.result.value = self.format_number(result)
+                self.reset_calc_state()
+            except ZeroDivisionError:
+                self.result.value = "Error"
+                self.reset_calc_state()
+
         else:
-            self.result.value = f"TODO: {data}"
+            self.result.value = f"FIXME: {data}"
             self.reset_calc_state()
 
         self.result.update()
